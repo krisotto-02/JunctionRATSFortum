@@ -5,3 +5,4 @@ pandas
 __future__
 pickle
 argparse
+statsmodels
