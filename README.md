@@ -1,50 +1,35 @@
-# Electricity Consumption Forecasting (48h & 12m)
-This project forecasts electricity consumption for multiple customer groups using **SARIMAX** models in Python. It produces:
-- **48-hour forecasts** 
-- **12-month forecasts**
-Outputs are formatted to match the example CSVs from the Fortum/Junction challenge.
-## Project Structure
-JunctionRATS/
-├─ Data/
-│  ├─ 20251111_JUNCTION_training.xlsx
-│  ├─ 20251111_JUNCTION_example_hourly.csv
-│  ├─ 20251111_JUNCTION_example_monthly.csv
-│  └─ models/
-│     ├─ sarimax_48h/      # saved hourly models (per group)
-│     └─ sarimax_12m/      # saved monthly models (per group)
-└─ src/
-   ├─ loadData.py          # load training + example data
-   ├─ dataProcessing.py    # feature engineering, exogenous builders
-   ├─ train48Hours.py      # train SARIMAX models for 48h horizon
-   ├─ train12Months.py     # train SARIMAX models for 12m horizon
-   ├─ forecast48Hours.py   # generate 48h forecasts
-   ├─ forecast12Months.py  # generate 12m forecasts
-   ├─ converter.py         # convert forecasts to submission CSVs
-   ├─ evaluation.py        # MAPE + FVA% vs naive baselines (UNUSED)
-   └─ main.py              # pipeline entry point
+README
 
-**Functionality**
-> Data loading
-loadData.py reads:
-hourly consumption and prices from the training Excel file
-example CSVs for the 48h and 12m horizons (for timestamps and column layout)
+ELECTRICITY CONSUMPTION FORECASTING
 
->Preprocessing & features
-dataProcessing.py:
-aligns consumption with prices,
-builds calendar features (hour of day, weekday/weekend, month, etc.),
-constructs future exogenous data (calendar + prices) for the forecast horizons.
+This project forecasts electricity consumption for multiple groups of customers using SARIMAX models in Python. It produces:
+- 48-hour energy consumption forecast
+- 12-month energy consumption forecast
 
->Model training
-train48Hours.py:
-trains per-group SARIMAX models on recent hourly data for the 48h forecast.
-train12Months.py:
-trains per-group SARIMAX models on monthly aggregates for the 12m forecast.
+DEPENDENCIES
+The following Python libraries were used in the Project, you can install them through pip:
+- pathlib
+- typing
+- pandas 
+- __future__
+- pickle
+- statsmodels
 
-Models are saved under:
-Data/models/sarimax_48h/
-Data/models/sarimax_12m/
+FUNCTIONALITY AND STRUCTURE
+>loadData: Handles data loading, reads hourly consumption and prices from the training Excel files and CSVs for the 48h and 12m time horizons.
+>dataProcessing: Preprocesses the loaded training data and aligns power consumption information with prices, builds calendar features (hour, weekday, month), and constructs future exogenous data for model training.
+>train48Hours and train12Months: Trains each customer on a SARIMAX machine learning model for both time periods, based on seasonal data and electricity prices
+>forecast48Hours and forecast12Months: Implements forecasting functionality for the next 48 hours or 12 months
+>converter: Converts the forecasted data into requested format and outputs it to a CSV file
+>main: Puts the whole Program together
 
-> Forecasting & submissions
-forecast48Hours.py and forecast12Months.py load the trained models and generate forecasts for all groups.
-converter.py reshapes these forecasts to match the example CSV formats and writes submission-ready files.
+OPERATING THIS PROJECT
+> In order to receive the forecasts, you must run the main file
+> The main file contains certain parameters you can tune in the end.
+> do_train: Set this either to args.skip_training or Not args.skip_training, whether you want to train new models for client groups or not
+> train_days_48h: Set this to a hour time-period of your choice or args.train_days_48h for max amount of training hours
+> train_months_12m: Set this to a month time-period of your choice or args.train_months_12m for max amount of training months
+> max_groups: Amount of client Group you want to train, either set a number, or leave as args.max_groups
+> Run the file --> the forecasts should appear in the respective Data folder
+
+
