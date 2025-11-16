@@ -1,0 +1,7 @@
+# requirements.txt
+pathlib
+typing
+pandas
+__future__
+pickle
+argparse
